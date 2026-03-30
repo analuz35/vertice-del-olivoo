@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monitoreo Energético IoT</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+.chart-container { position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 400px; } }
+.timeline-dot { content: ''; position: absolute; width: 16px; height: 16px; background-color: #3b82f6; border-radius: 50%; left: -8px; top: 6px; border: 4px solid #0f172a; }
+.timeline-line { position: absolute; width: 2px; background-color: #334155; top: 24px; bottom: -24px; left: -1px; }
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: { slateBg: '#1e293b', blueAccent: '#3b82f6', emeraldSuccess: '#10b981', amberWarn: '#f59e0b', redAlert: '#ef4444' }
+}
+}
+}
+</script>
+</head>
+<body class="antialiased pb-20">
+
+<header class="bg-slateBg border-b border-slate-700 py-12 px-6 shadow-lg mb-12">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
+<div>
+<h2 class="text-xl md:text-2xl text-slate-300 font-light max-w-2xl">Sistema IoT de Monitoreo y Eficiencia Energética Industrial</h2>
+</div>
+<div class="mt-6 md:mt-0 flex flex-col gap-3">
+<div class="bg-slate-800 border border-slate-600 rounded-full px-5 py-2 flex items-center gap-2">
+<span class="text-xl">📍</span> <span class="font-medium text-slate-200">Cruz del Eje, Córdoba</span>
+</div>
+<div class="bg-slate-800 border border-slate-600 rounded-full px-5 py-2 flex items-center gap-2">
+<span class="text-xl">⏱️</span> <span class="font-medium text-slate-200">Roadmap: 8 Meses</span>
+</div>
+</div>
+</div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 grid grid-cols-1 gap-16">
+
+<section>
+<h3 class="text-3xl font-bold border-l-4 border-amberWarn pl-4 mb-6">1. El Problema: Ineficiencia a Ciegas</h3>
+<p class="text-lg text-slate-300 mb-8 max-w-4xl leading-relaxed">
+Las industrias agropecuarias y metalúrgicas del Noroeste Provincial operan bajo una constante incertidumbre financiera. La recepción de la factura eléctrica a mes vencido impide cualquier reacción proactiva. Sumado a esto, las multas por mala compensación de energía reactiva y el mantenimiento reactivo (esperar a que un motor se queme para actuar) erosionan severamente los márgenes de ganancia.
+</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+<div class="bg-slateBg p-6 rounded-2xl shadow-xl border border-slate-700">
+<h4 class="text-xl font-semibold mb-4 text-center">Distribución del Costo Energético (Promedio)</h4>
+<div class="chart-container">
+<canvas id="costChart"></canvas>
+</div>
+</div>
+<div class="flex flex-col gap-6">
+<div class="bg-slate-800 p-5 rounded-xl border-l-4 border-redAlert shadow-md">
+<h5 class="text-lg font-bold text-red-400 mb-2">Facturación Sorpresa</h5>
+<p class="text-slate-300 text-sm">Picos de demanda no detectados generan cargos fijos altísimos impuestos por la prestadora de red eléctrica.</p>
+</div>
+<div class="bg-slate-800 p-5 rounded-xl border-l-4 border-amberWarn shadow-md">
+<h5 class="text-lg font-bold text-amber-400 mb-2">Mantenimiento Reactivo</h5>
+<p class="text-slate-300 text-sm">La quema de maquinaria interrumpe la producción. Un motor desgastado consume más amperaje antes de fallar.</p>
+</div>
+<div class="bg-slate-800 p-5 rounded-xl border-l-4 border-slate-500 shadow-md">
+<h5 class="text-lg font-bold text-slate-300 mb-2">Aislamiento Tecnológico</h5>
+<p class="text-slate-400 text-sm">Las soluciones domóticas tradicionales fallan en entornos rurales sin Wi-Fi estable o infraestructura IT.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<h3 class="text-3xl font-bold border-l-4 border-blueAccent pl-4 mb-6">2. Arquitectura EcoHakai: Hardware & Nube</h3>
+<p class="text-lg text-slate-300 mb-8 max-w-4xl leading-relaxed">
+Nuestra infraestructura está diseñada para ser resiliente. Utilizamos sensores no invasivos en los tableros principales que transmiten datos telemétricos. Gracias al procesamiento *Edge Computing* y conectividad GSM/LoRa, garantizamos la entrega de datos a nuestra base de datos de series temporales incluso en las fincas más aisladas de la Ruta 38.
+</p>
+<div class="bg-slateBg p-8 rounded-2xl shadow-xl border border-slate-700 overflow-x-auto">
+<div class="flex flex-col md:flex-row items-center justify-between min-w-[800px] gap-4">
+<div class="flex flex-col items-center bg-slate-800 p-6 rounded-xl border border-slate-600 w-64 text-center">
+<span class="text-5xl mb-4">⚡</span>
+<h4 class="font-bold text-lg mb-2 text-blue-400">Nivel Tablero</h4>
+<p class="text-sm text-slate-300">Sensores SCT-013 Abrazadera en Fase (No invasivo)</p>
+</div>
+<div class="text-4xl text-slate-500">➔</div>
+<div class="flex flex-col items-center bg-slate-800 p-6 rounded-xl border border-slate-600 w-64 text-center">
+<span class="text-5xl mb-4">⚙️</span>
+<h4 class="font-bold text-lg mb-2 text-blue-400">Edge Computing</h4>
+<p class="text-sm text-slate-300">ESP32 + MicroSD (Offline First) Cálculo RMS Local</p>
+</div>
+<div class="text-4xl text-slate-500">➔</div>
+<div class="flex flex-col items-center bg-slate-800 p-6 rounded-xl border border-slate-600 w-64 text-center">
+<span class="text-5xl mb-4">📡</span>
+<h4 class="font-bold text-lg mb-2 text-blue-400">Telemetría Ligera</h4>
+<p class="text-sm text-slate-300">Transmisión vía MQTT (Chip GSM / Wi-Fi)</p>
+</div>
+<div class="text-4xl text-slate-500">➔</div>
+<div class="flex flex-col items-center bg-slate-800 p-6 rounded-xl border border-emeraldSuccess w-64 text-center shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+<span class="text-5xl mb-4">☁️</span>
+<h4 class="font-bold text-lg mb-2 text-emerald-400">Plataforma SaaS</h4>
+<p class="text-sm text-slate-300">TimescaleDB + Node.js Dashboard en tiempo real</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<h3 class="text-3xl font-bold border-l-4 border-emeraldSuccess pl-4 mb-6">3. Impacto Financiero y Proyección (ROI)</h3>
+<p class="text-lg text-slate-300 mb-8 max-w-4xl leading-relaxed">
+La prevención de una sola falla de motor industrial o la mitigación de picos de demanda durante los primeros 4 meses amortiza completamente el costo de instalación de la plataforma EcoHakai. La curva de ahorro se acentúa a medida que el algoritmo establece líneas base de consumo más precisas.
+</p>
+<div class="bg-slateBg p-6 rounded-2xl shadow-xl border border-slate-700 w-full">
+<h4 class="text-xl font-semibold mb-4 text-center">Evolución de Costos Energéticos: Sistema Tradicional vs EcoHakai</h4>
+<div class="chart-container !max-w-4xl">
+<canvas id="roiChart"></canvas>
+</div>
+</div>
+</section>
+
+<section>
+<h3 class="text-3xl font-bold border-l-4 border-blueAccent pl-4 mb-6">4. Módulos del Sistema SaaS</h3>
+<p class="text-lg text-slate-300 mb-8 max-w-4xl leading-relaxed">
+El software en la nube transforma los datos crudos de corriente en inteligencia de negocios accionable, permitiendo a los administradores industriales tomar decisiones basadas en datos y prevenir catástrofes operativas.
+</p>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="bg-slate-800 p-6 rounded-xl border border-slate-600 hover:border-blueAccent transition-colors">
+<div class="text-4xl mb-4">📊</div>
+<h4 class="font-bold text-lg mb-2 text-white">Telemetría B2B</h4>
+<p class="text-sm text-slate-400">Dashboard interactivo con visualización gráfica del consumo general y curvas de demanda por circuito individual.</p>
+</div>
+<div class="bg-slate-800 p-6 rounded-xl border border-slate-600 hover:border-emeraldSuccess transition-colors">
+<div class="text-4xl mb-4">💵</div>
+<h4 class="font-bold text-lg mb-2 text-white">Estimador de Costos</h4>
+<p class="text-sm text-slate-400">Algoritmo integrado que cruza el consumo KWh con el cuadro tarifario vigente para predecir la factura final.</p>
+</div>
+<div class="bg-slate-800 p-6 rounded-xl border border-slate-600 hover:border-amberWarn transition-colors">
+<div class="text-4xl mb-4">🔔</div>
+<h4 class="font-bold text-lg mb-2 text-white">Alertas Predictivas</h4>
+<p class="text-sm text-slate-400">Notificaciones automáticas por WhatsApp si un motor excede su línea base histórica, previniendo quemaduras.</p>
+</div>
+<div class="bg-slate-800 p-6 rounded-xl border border-slate-600 hover:border-blueAccent transition-colors">
+<div class="text-4xl mb-4">📄</div>
+<h4 class="font-bold text-lg mb-2 text-white">Reportes y Huella</h4>
+<p class="text-sm text-slate-400">Exportación de informes gerenciales mensuales incluyendo cálculo de mitigación de Huella de Carbono (CO2).</p>
+</div>
+</div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-12 gap-10">
+<div class="md:col-span-5">
+<h3 class="text-3xl font-bold border-l-4 border-blueAccent pl-4 mb-6">5. Stack Tecnológico</h3>
+<p class="text-lg text-slate-300 mb-6 leading-relaxed">
+Elegimos una pila tecnológica moderna enfocada en la alta concurrencia (High Throughput) y en el manejo masivo de series temporales, vital para el Internet de las Cosas industrial.
+</p>
+<div class="bg-slateBg p-6 rounded-2xl shadow-xl border border-slate-700">
+<div class="chart-container">
+<canvas id="stackChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="md:col-span-7">
+<h3 class="text-3xl font-bold border-l-4 border-emeraldSuccess pl-4 mb-6">6. Roadmap de Ejecución</h3>
+<div class="bg-slateBg p-8 rounded-2xl shadow-xl border border-slate-700">
+<div class="relative pl-6 space-y-8">
+<div class="timeline-line"></div>
+<div class="relative">
+<div class="timeline-dot"></div>
+<h4 class="text-xl font-bold text-blue-400">Mes 1: Prototipado Hardware</h4>
+<p class="text-slate-400 text-sm mt-1">Ensamblaje ESP32 + SCT-013, calibración RMS y pruebas en tablero local.</p>
+</div>
+<div class="relative">
+<div class="timeline-dot"></div>
+<h4 class="text-xl font-bold text-blue-400">Mes 2: Infraestructura Cloud</h4>
+<p class="text-slate-400 text-sm mt-1">Configuración del Broker MQTT y base de datos TimescaleDB.</p>
+</div>
+<div class="relative">
+<div class="timeline-dot"></div>
+<h4 class="text-xl font-bold text-blue-400">Mes 3-4: Backend & Resiliencia</h4>
+<p class="text-slate-400 text-sm mt-1">Endpoints de ingesta. Lógica Offline-First (SD) y transmisión vía GSM.</p>
+</div>
+<div class="relative">
+<div class="timeline-dot"></div>
+<h4 class="text-xl font-bold text-blue-400">Mes 5-6: Frontend SaaS</h4>
+<p class="text-slate-400 text-sm mt-1">Dashboard React.js, WebSockets en tiempo real y Alertas WhatsApp.</p>
+</div>
+<div class="relative">
+<div class="timeline-dot"></div>
+<h4 class="text-xl font-bold text-emerald-400">Mes 7-8: QA & Go-to-Market</h4>
+<p class="text-slate-400 text-sm mt-1">Pruebas de estrés masivas e instalación piloto en desmotadora/aceitera de Cruz del Eje.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<script>
+const wrapText = label => {
+if(label.length <= 16) return label;
+const words = label.split(' ');
+let lines = [], current = '';
+words.forEach(word => {
+if((current + word).length > 16){
+if(current) lines.push(current.trim());
+current = word + ' ';
+} else {
+current += word + ' ';
+}
+});
+if(current) lines.push(current.trim());
+return lines;
+};
+
+const tooltipConfig = {
+tooltip: {
+backgroundColor: 'rgba(15, 23, 42, 0.9)',
+titleColor: '#f8fafc',
+bodyColor: '#cbd5e1',
+borderColor: '#334155',
+borderWidth: 1,
+padding: 12,
+callbacks: {
+title: function(tooltipItems) {
+const item = tooltipItems[0];
+let label = item.chart.data.labels[item.dataIndex];
+if (Array.isArray(label)) return label.join(' ');
+return label;
+}
+}
+}
+};
+
+const commonOptions = {
+responsive: true,
+maintainAspectRatio: false,
+color: '#94a3b8',
+plugins: {
+legend: { labels: { color: '#cbd5e1', font: { family: 'Segoe UI' } } }
+}
+};
+
+const costCtx = document.getElementById('costChart').getContext('2d');
+new Chart(costCtx, {
+type: 'doughnut',
+data: {
+labels: [
+wrapText("Energía Útil Operativa"),
+wrapText("Penalizaciones Multas EPEC"),
+wrapText("Ineficiencia Desgaste Motor"),
+wrapText("Consumo Vampiro Standby")
+],
+datasets: [{
+data: [55, 20, 15, 10],
+backgroundColor: ['#10b981', '#ef4444', '#f59e0b', '#64748b'],
+borderColor: '#1e293b',
+borderWidth: 2
+}]
+},
+options: {
+...commonOptions,
+cutout: '65%',
+plugins: {
+...commonOptions.plugins,
+...tooltipConfig
+}
+}
+});
+
+const roiCtx = document.getElementById('roiChart').getContext('2d');
+new Chart(roiCtx, {
+type: 'line',
+data: {
+labels: ["Mes 1", "Mes 2", "Mes 3", "Mes 4", "Mes 5", "Mes 6", "Mes 7", "Mes 8", "Mes 9", "Mes 10", "Mes 11", "Mes 12"],
+datasets: [
+{
+label: wrapText('Costo Acumulado Sin Monitoreo'),
+data: [100, 220, 350, 490, 650, 820, 990, 1180, 1380, 1590, 1800, 2050],
+borderColor: '#ef4444',
+backgroundColor: 'rgba(239, 68, 68, 0.1)',
+borderWidth: 3,
+fill: true,
+tension: 0.4
+},
+{
+label: wrapText('Costo Acumulado Con EcoHakai'),
+data: [100, 205, 305, 400, 480, 560, 630, 700, 770, 830, 890, 950],
+borderColor: '#10b981',
+backgroundColor: 'rgba(16, 185, 129, 0.2)',
+borderWidth: 3,
+fill: true,
+tension: 0.4
+}
+]
+},
+options: {
+...commonOptions,
+scales: {
+y: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' }, title: { display: true, text: 'Gasto Relativo (Miles $)', color: '#cbd5e1' } },
+x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8' } }
+},
+plugins: {
+...commonOptions.plugins,
+...tooltipConfig
+}
+}
+});
+
+const stackCtx = document.getElementById('stackChart').getContext('2d');
+new Chart(stackCtx, {
+type: 'polarArea',
+data: {
+labels: [
+wrapText("C++ Firmware ESP32"),
+wrapText("TimescaleDB (PostgreSQL)"),
+wrapText("Node.js / MQTT Broker"),
+wrapText("React.js Dashboard UI")
+],
+datasets: [{
+data: [70, 95, 85, 80],
+backgroundColor: [
+'rgba(245, 158, 11, 0.6)',
+'rgba(59, 130, 246, 0.6)',
+'rgba(16, 185, 129, 0.6)',
+'rgba(139, 92, 246, 0.6)'
+],
+borderColor: '#1e293b',
+borderWidth: 2
+}]
+},
+options: {
+...commonOptions,
+scales: {
+r: {
+grid: { color: '#334155' },
+angleLines: { color: '#334155' },
+ticks: { display: false, backdropColor: 'transparent' }
+}
+},
+plugins: {
+...commonOptions.plugins,
+...tooltipConfig
+}
+}
+});
+</script>
+</body>
+</html>

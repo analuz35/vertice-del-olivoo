@@ -1,0 +1,503 @@
+<!-- 
+PALETTE: Vibrant Fintech (Backgrounds: Slate-900/800, Accents: Fuchsia-500, Cyan-400, Emerald-500, Amber-400)
+PLAN SUMMARY: The infographic is structured into five narrative sections. 1. Introduction to the local credit problem (Manual vs Digital). 2. The BaaS Architecture solution. 3. The Smart Credit Score Engine (how it's calculated and distributed). 4. Debt Lifecycle Management (automated garnishment and blocking). 5. Tech Stack and 8-month Roadmap.
+VISUALIZATION CHOICES: 
+- Bar Chart (Chart.js): Goal: Compare. Compares the financial impact of informal credit vs HakaiPay. Justification: Best for categorical comparison. NO SVG.
+- Flow Diagram (HTML/CSS): Goal: Organize/Relationships. Shows the BaaS architecture flow. Justification: Structural CSS replaces diagrams without violating constraints. NO SVG.
+- Donut Chart (Chart.js): Goal: Compare/Composition. Shows the exact weighted distribution of the Score Algorithm. Justification: Ideal for percentage breakdowns. NO SVG.
+- 3D Scatter Plot (Plotly.js WebGL): Goal: Relationships. Simulates the user base distribution based on the 3 score variables. Justification: Requires WebGL for multidimensional data. Toolbar disabled to prevent SVG injection. NO SVG.
+- Timeline (HTML/CSS): Goal: Change. Shows the debt lifecycle. Justification: Pure CSS execution. NO SVG.
+- Radar Chart (Chart.js): Goal: Organize. Displays the technology stack capabilities. Justification: Excellent for multi-variable assessment. NO SVG.
+CONFIRMATION: I explicitly confirm that NEITHER Mermaid JS NOR SVG were used anywhere in the output.
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fintech B2B2C SPA</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+<style>
+body { background-color: #0f172a; color: #f8fafc; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+.chart-container { position: relative; width: 100%; max-width: 700px; margin-left: auto; margin-right: auto; height: 350px; max-height: 400px; }
+@media (min-width: 768px) { .chart-container { height: 400px; } }
+.plotly-container { width: 100%; max-width: 100%; height: 450px; margin: 0 auto; border-radius: 0.75rem; overflow: hidden; background-color: #1e293b; }
+.glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(56, 189, 248, 0.2); }
+.timeline-node { width: 24px; height: 24px; border-radius: 50%; background-color: #06b6d4; border: 4px solid #0f172a; position: absolute; left: -12px; }
+.timeline-track { position: absolute; width: 2px; background-color: #334155; top: 24px; bottom: 0; left: -1px; }
+</style>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+colors: {
+primary: '#0f172a',
+surface: '#1e293b',
+accentCyan: '#06b6d4',
+accentFuchsia: '#d946ef',
+success: '#10b981',
+warning: '#f59e0b',
+danger: '#ef4444'
+}
+}
+}
+}
+</script>
+</head>
+<body class="antialiased pb-24 selection:bg-accentFuchsia selection:text-white">
+
+<nav class="sticky top-0 z-50 bg-primary/90 backdrop-blur-md border-b border-surface py-4 px-6 shadow-lg">
+<div class="max-w-7xl mx-auto flex justify-between items-center">
+<div class="text-2xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-accentCyan to-accentFuchsia">
+</div>
+</div>
+</nav>
+
+<header class="max-w-7xl mx-auto px-6 py-16 md:py-24">
+<h1 class="text-5xl md:text-7xl font-extrabold mb-6 leading-tight tracking-tight">
+La Evolución del <span class="text-transparent bg-clip-text bg-gradient-to-r from-accentCyan to-accentFuchsia">Crédito Local</span>
+</h1>
+<p class="text-xl md:text-2xl text-slate-400 max-w-3xl leading-relaxed mb-10">
+Infraestructura Fintech B2B2C diseñada para digitalizar el "fiado", erradicar el riesgo ciego y potenciar la liquidez del comercio de cercanía mediante un modelo Banking as a Service (BaaS).
+</p>
+<div class="flex flex-wrap gap-4">
+<div class="glass-card px-6 py-3 rounded-lg flex items-center gap-3 shadow-lg">
+<span class="text-2xl">⏱️</span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Desarrollo</span>
+<span class="font-bold text-white">8 Meses</span>
+</div>
+</div>
+<div class="glass-card px-6 py-3 rounded-lg flex items-center gap-3 shadow-lg">
+<span class="text-2xl">📱</span>
+<div class="flex flex-col">
+<span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Tecnología</span>
+<span class="font-bold text-white">Transferencias 3.0</span>
+</div>
+</div>
+</div>
+</header>
+
+<main class="max-w-7xl mx-auto px-6 grid grid-cols-1 gap-24">
+
+<section>
+<div class="mb-10 border-l-4 border-accentFuchsia pl-5">
+<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">1. El Costo Oculto de la Informalidad</h2>
+<p class="text-lg text-slate-300 max-w-4xl">
+El comercio local sufre una pérdida de liquidez crítica debido a la gestión manual de cuentas corrientes (libretas). La falta de un sistema centralizado genera "Riesgo Ciego", donde los comerciantes asumen incobrables sin conocer el historial del cliente, y fricciones fiscales por el manejo centralizado de fondos no estructurados.
+</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<div class="lg:col-span-7 glass-card p-6 md:p-8 rounded-2xl shadow-xl flex flex-col justify-center">
+<h3 class="text-xl font-bold mb-2 text-center text-white">Impacto Financiero: Libreta Manual vs. HakaiPay</h3>
+<p class="text-sm text-slate-400 text-center mb-6">El gráfico ilustra la reducción drástica en fricciones operativas e impositivas al adoptar nuestro ecosistema digital.</p>
+<div class="chart-container">
+<canvas id="problemChart"></canvas>
+</div>
+</div>
+<div class="lg:col-span-5 flex flex-col gap-6 justify-center">
+<div class="bg-surface p-6 rounded-xl border-l-4 border-danger shadow-md">
+<div class="text-3xl mb-3">📓</div>
+<h4 class="text-lg font-bold text-white mb-2">Riesgo Ciego</h4>
+<p class="text-slate-400 text-sm">Préstamos otorgados sin datos analíticos de comportamiento de pago en la red comercial local.</p>
+</div>
+<div class="bg-surface p-6 rounded-xl border-l-4 border-warning shadow-md">
+<div class="text-3xl mb-3">⚖️</div>
+<h4 class="text-lg font-bold text-white mb-2">Fricción Regulatoria (SIRCREB)</h4>
+<p class="text-slate-400 text-sm">Manejar dinero de terceros en cuentas propias genera doble imposición fiscal letal para la rentabilidad.</p>
+</div>
+<div class="bg-surface p-6 rounded-xl border-l-4 border-slate-500 shadow-md">
+<div class="text-3xl mb-3">🚫</div>
+<h4 class="text-lg font-bold text-white mb-2">Ausencia de Gestión de Deuda</h4>
+<p class="text-slate-400 text-sm">Incapacidad para aplicar intereses punitorios o ejecutar cobranzas automáticas sobre saldos vencidos.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="mb-10 border-l-4 border-accentCyan pl-5">
+<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">2. Arquitectura BaaS (Banking as a Service)</h2>
+<p class="text-lg text-slate-300 max-w-4xl">
+HakaiPay actúa exclusivamente como una capa de inteligencia de software (Orquestador). Al integrarnos con un proveedor BaaS (Pomelo/BIND), garantizamos la custodia delegada de fondos y la creación de CVUs reales, blindando el proyecto legal y fiscalmente.
+</p>
+</div>
+
+<div class="glass-card p-8 rounded-2xl shadow-xl overflow-x-auto">
+<div class="flex flex-col md:flex-row items-center justify-between min-w-[800px] gap-6">
+<div class="bg-surface p-6 rounded-xl border border-slate-600 w-1/4 text-center shadow-lg relative">
+<span class="text-5xl block mb-4">📱</span>
+<h4 class="font-bold text-lg text-white mb-1">Comercio / Usuario</h4>
+<p class="text-xs text-slate-400">Escaneo QR y solicitud de crédito. Interfaz UX.</p>
+</div>
+<div class="text-3xl text-accentCyan font-bold">➔</div>
+<div class="bg-surface p-6 rounded-xl border border-accentCyan w-1/4 text-center shadow-[0_0_15px_rgba(6,182,212,0.3)] relative">
+<span class="absolute -top-3 -right-3 bg-accentCyan text-black text-[10px] font-black px-2 py-1 rounded shadow-md uppercase">Core</span>
+<span class="text-5xl block mb-4">🧠</span>
+<h4 class="font-bold text-lg text-white mb-1">HakaiPay SaaS</h4>
+<p class="text-xs text-slate-400">Motor de Score, Autorización ACID y Firma Digital Pagaré.</p>
+</div>
+<div class="text-3xl text-accentFuchsia font-bold">➔</div>
+<div class="bg-surface p-6 rounded-xl border border-accentFuchsia w-1/4 text-center shadow-[0_0_15px_rgba(217,70,239,0.3)] relative">
+<span class="absolute -top-3 -right-3 bg-accentFuchsia text-white text-[10px] font-black px-2 py-1 rounded shadow-md uppercase">BCRA Regulado</span>
+<span class="text-5xl block mb-4">🏦</span>
+<h4 class="font-bold text-lg text-white mb-1">Proveedor BaaS</h4>
+<p class="text-xs text-slate-400">Custodia de fondos, Liquidación A2A y CVUs.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section>
+<div class="mb-10 border-l-4 border-success pl-5">
+<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">3. Motor de Crédito Inteligente</h2>
+<p class="text-lg text-slate-300 max-w-4xl">
+El corazón del sistema abandona la intuición para abrazar los datos. El algoritmo clasifica a los usuarios (0 a 1000 puntos) determinando los límites de "fiado" seguros.
+</p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+<div class="glass-card p-6 md:p-8 rounded-2xl shadow-xl">
+<h3 class="text-xl font-bold mb-2 text-center text-white">Composición del Algoritmo de Score</h3>
+<p class="text-sm text-slate-400 text-center mb-6">Ponderación de variables paramétricas en la evaluación de riesgo en tiempo real.</p>
+<div class="chart-container">
+<canvas id="scoreDonutChart"></canvas>
+</div>
+</div>
+<div class="glass-card p-6 md:p-8 rounded-2xl shadow-xl flex flex-col justify-center gap-6">
+<h3 class="text-2xl font-bold text-white mb-2">Garantía Digital Integrada</h3>
+<div class="flex items-start gap-4 p-4 bg-surface rounded-lg border border-slate-700">
+<div class="text-3xl">🪪</div>
+<div>
+<h4 class="text-white font-bold">KYC & Biometría</h4>
+<p class="text-sm text-slate-400 mt-1">Onboarding validado contra el RENAPER (DNI frente/dorso y prueba de vida facial) para mitigar fraude de identidad.</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 bg-surface rounded-lg border border-slate-700">
+<div class="text-3xl">✍️</div>
+<div>
+<h4 class="text-white font-bold">Pagaré Electrónico Exportable</h4>
+<p class="text-sm text-slate-400 mt-1">Cada crédito otorgado exige la firma de un Contrato de Adhesión vía PIN/Token, generando un PDF con validez probatoria legal.</p>
+</div>
+</div>
+</div>
+</div>
+
+<div class="mt-10 glass-card p-6 md:p-8 rounded-2xl shadow-xl">
+<h3 class="text-xl font-bold mb-2 text-white">Simulación: Distribución Demográfica del Score</h3>
+<p class="text-sm text-slate-400 mb-6">Representación multidimensional de una cartera de usuarios. El motor aísla clústeres de alto riesgo (rojo) protegiendo el capital del comercio.</p>
+<div id="plotlyScore" class="plotly-container"></div>
+<p class="text-xs text-slate-500 mt-4 text-center">* Gráfico interactivo WebGL: Eje X (Antigüedad), Eje Y (Consumo Mensual), Eje Z (Puntualidad). Color indica Score Global.</p>
+</div>
+</section>
+
+<section>
+<div class="mb-10 border-l-4 border-warning pl-5">
+<h2 class="text-3xl md:text-4xl font-bold text-white mb-4">4. Ciclo de Vida de la Deuda e Impagos</h2>
+<p class="text-lg text-slate-300 max-w-4xl">
+La plataforma ejecuta acciones automatizadas (CRON jobs) para recuperar capital sin intervención humana, aplicando desde recordatorios amigables hasta el congelamiento total en la red local.
+</p>
+</div>
+
+<div class="glass-card p-8 md:p-12 rounded-2xl shadow-xl">
+<div class="relative pl-8 space-y-12">
+<div class="timeline-track"></div>
+<div class="relative">
+<div class="timeline-node border-success bg-success"></div>
+<h4 class="text-2xl font-bold text-success mb-2">Día 0: Crédito Vigente</h4>
+<p class="text-slate-300">El saldo se encuentra dentro de los plazos estipulados por el comercio. Estado en BD: <code class="bg-surface px-2 py-1 rounded text-accentCyan text-sm">PENDING</code>.</p>
+</div>
+<div class="relative">
+<div class="timeline-node border-warning bg-warning"></div>
+<h4 class="text-2xl font-bold text-warning mb-2">Mora Temprana (1 a 30 Días)</h4>
+<p class="text-slate-300">El sistema calcula y aplica intereses punitorios diarios. Se disparan notificaciones Push y mensajes mediante la API de WhatsApp para recordatorios amigables.</p>
+</div>
+<div class="relative">
+<div class="timeline-node border-danger bg-danger"></div>
+<h4 class="text-2xl font-bold text-danger mb-2">Mora Media (31 a 60 Días): Garnishment</h4>
+<p class="text-slate-300"><strong>Congelamiento:</strong> Bloqueo preventivo en <em>toda la red</em> de comercios asociados de Cruz del Eje.<br><strong>Débito Automático:</strong> Si el usuario recibe fondos en su CVU, el sistema intercepta (Garnishment) y cancela la deuda automáticamente.</p>
+</div>
+<div class="relative">
+<div class="timeline-node border-slate-600 bg-slate-800"></div>
+<h4 class="text-2xl font-bold text-slate-400 mb-2">Mora Grave (+60 Días): Veraz Local</h4>
+<p class="text-slate-300">Caída drástica del Score Crediticio. Generación del "Certificado de Deuda" en PDF con logs inmutables listos para acción legal y agencias de cobranza.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<div class="lg:col-span-5 flex flex-col">
+<div class="mb-6 border-l-4 border-accentCyan pl-4">
+<h3 class="text-3xl font-bold text-white">5. Stack Tecnológico</h3>
+</div>
+<p class="text-slate-300 mb-6">Arquitectura orientada a eventos para transaccionalidad ACID perfecta, alta concurrencia y despliegue rápido.</p>
+<div class="glass-card p-6 rounded-2xl shadow-xl flex-grow flex items-center justify-center">
+<div class="chart-container w-full">
+<canvas id="techRadarChart"></canvas>
+</div>
+</div>
+</div>
+
+<div class="lg:col-span-7 flex flex-col">
+<div class="mb-6 border-l-4 border-accentFuchsia pl-4">
+<h3 class="text-3xl font-bold text-white">Roadmap de Ejecución</h3>
+</div>
+<p class="text-slate-300 mb-6">Plan de desarrollo ágil de 8 meses hacia la fase Go-to-Market en Cruz del Eje.</p>
+<div class="glass-card rounded-2xl shadow-xl overflow-hidden flex-grow">
+<div class="grid grid-cols-4 border-b border-slate-700 bg-surface/50 font-bold text-slate-300 text-sm tracking-wide uppercase">
+<div class="p-4 border-r border-slate-700">Meses</div>
+<div class="col-span-3 p-4">Hito de Desarrollo Core</div>
+</div>
+<div class="grid grid-cols-4 border-b border-slate-700 hover:bg-surface/30 transition-colors">
+<div class="p-4 border-r border-slate-700 text-accentCyan font-bold">1</div>
+<div class="col-span-3 p-4 text-slate-300">Arquitectura, ERD, diseño UX/UI y Sandbox BaaS.</div>
+</div>
+<div class="grid grid-cols-4 border-b border-slate-700 hover:bg-surface/30 transition-colors">
+<div class="p-4 border-r border-slate-700 text-accentCyan font-bold">2 - 3</div>
+<div class="col-span-3 p-4 text-slate-300">Billetera, Microservicios, generación CVUs y pagos QR.</div>
+</div>
+<div class="grid grid-cols-4 border-b border-slate-700 hover:bg-surface/30 transition-colors">
+<div class="p-4 border-r border-slate-700 text-accentCyan font-bold">4 - 5</div>
+<div class="col-span-3 p-4 text-slate-300">Motor de Crédito (Score), Firma Pagaré y CRONs de mora.</div>
+</div>
+<div class="grid grid-cols-4 border-b border-slate-700 hover:bg-surface/30 transition-colors">
+<div class="p-4 border-r border-slate-700 text-accentCyan font-bold">6 - 7</div>
+<div class="col-span-3 p-4 text-slate-300">Frontend (App/Web), QA ACID, Pentesting de seguridad.</div>
+</div>
+<div class="grid grid-cols-4 bg-accentFuchsia/10 hover:bg-accentFuchsia/20 transition-colors">
+<div class="p-4 border-r border-slate-700 text-accentFuchsia font-bold">8</div>
+<div class="col-span-3 p-4 text-white font-bold">Go-to-Market: Closed Beta comercial en Cruz del Eje.</div>
+</div>
+</div>
+</div>
+</section>
+
+</main>
+
+<script>
+const wrapText = (label) => {
+if(label.length <= 16) return label;
+const words = label.split(' ');
+let lines = [], current = '';
+words.forEach(word => {
+if((current + word).length > 16){
+if(current) lines.push(current.trim());
+current = word + ' ';
+} else {
+current += word + ' ';
+}
+});
+if(current) lines.push(current.trim());
+return lines;
+};
+
+const tooltipConfig = {
+tooltip: {
+backgroundColor: 'rgba(30, 41, 59, 0.95)',
+titleColor: '#f8fafc',
+bodyColor: '#cbd5e1',
+borderColor: '#06b6d4',
+borderWidth: 1,
+padding: 12,
+titleFont: { family: 'Segoe UI', size: 14 },
+bodyFont: { family: 'Segoe UI', size: 13 },
+callbacks: {
+title: function(tooltipItems) {
+const item = tooltipItems[0];
+let label = item.chart.data.labels[item.dataIndex];
+if (Array.isArray(label)) return label.join(' ');
+return label;
+}
+}
+}
+};
+
+const sharedOptions = {
+responsive: true,
+maintainAspectRatio: false,
+color: '#94a3b8',
+plugins: {
+legend: { labels: { color: '#e2e8f0', font: { family: 'Segoe UI', size: 12 }, padding: 15 } }
+}
+};
+
+const ctxBar = document.getElementById('problemChart').getContext('2d');
+new Chart(ctxBar, {
+type: 'bar',
+data: {
+labels: [
+wrapText("Carga Administrativa Manual"),
+wrapText("Pérdida por Incobrables"),
+wrapText("Retenciones Impositivas (Doble)")
+],
+datasets: [
+{
+label: 'Libreta Tradicional (Riesgo)',
+data: [85, 60, 90],
+backgroundColor: 'rgba(239, 68, 68, 0.8)',
+borderColor: '#ef4444',
+borderWidth: 1,
+borderRadius: 4
+},
+{
+label: 'HakaiPay + BaaS (Eficiencia)',
+data: [15, 10, 5],
+backgroundColor: 'rgba(16, 185, 129, 0.8)',
+borderColor: '#10b981',
+borderWidth: 1,
+borderRadius: 4
+}
+]
+},
+options: {
+...sharedOptions,
+scales: {
+y: {
+grid: { color: 'rgba(51, 65, 85, 0.4)' },
+ticks: { color: '#94a3b8' },
+title: { display: true, text: 'Índice de Fricción Operativa', color: '#cbd5e1' }
+},
+x: {
+grid: { display: false },
+ticks: { color: '#cbd5e1' }
+}
+},
+plugins: {
+...sharedOptions.plugins,
+...tooltipConfig
+}
+}
+});
+
+const ctxDonut = document.getElementById('scoreDonutChart').getContext('2d');
+new Chart(ctxDonut, {
+type: 'doughnut',
+data: {
+labels: [
+wrapText("Historial de Pagos a Término"),
+wrapText("Nivel de Consumo Mensual"),
+wrapText("Antigüedad en Plataforma")
+],
+datasets: [{
+data: [50, 30, 20],
+backgroundColor: [
+'#06b6d4',
+'#d946ef',
+'#f59e0b'
+],
+borderColor: '#1e293b',
+borderWidth: 4,
+hoverOffset: 6
+}]
+},
+options: {
+...sharedOptions,
+cutout: '70%',
+layout: { padding: 10 },
+plugins: {
+...sharedOptions.plugins,
+...tooltipConfig
+}
+}
+});
+
+const ctxRadar = document.getElementById('techRadarChart').getContext('2d');
+new Chart(ctxRadar, {
+type: 'radar',
+data: {
+labels: [
+wrapText("PostgreSQL (ACID DB)"),
+wrapText("Node.js / NestJS"),
+wrapText("React Native Expo"),
+wrapText("API BaaS Pomelo/BIND"),
+wrapText("Cifrado AES-256 / JWT")
+],
+datasets: [{
+label: 'Cobertura Tecnológica',
+data: [100, 90, 85, 95, 100],
+backgroundColor: 'rgba(6, 182, 212, 0.3)',
+borderColor: '#06b6d4',
+pointBackgroundColor: '#d946ef',
+pointBorderColor: '#fff',
+pointHoverBackgroundColor: '#fff',
+pointHoverBorderColor: '#d946ef',
+borderWidth: 2
+}]
+},
+options: {
+...sharedOptions,
+scales: {
+r: {
+grid: { color: 'rgba(51, 65, 85, 0.5)' },
+angleLines: { color: 'rgba(51, 65, 85, 0.5)' },
+pointLabels: { color: '#cbd5e1', font: { size: 12 } },
+ticks: { display: false, backdropColor: 'transparent' }
+}
+},
+plugins: {
+...sharedOptions.plugins,
+...tooltipConfig
+}
+}
+});
+
+function drawPlotly() {
+const numPoints = 200;
+let x = [], y = [], z = [], colors = [];
+
+for(let i=0; i<numPoints; i++) {
+let ant = Math.random() * 24; 
+let cons = Math.random() * 50000 + 5000; 
+let punt = Math.random() * 100; 
+
+x.push(ant);
+y.push(cons);
+z.push(punt);
+
+let score = (punt * 0.5) + ((cons/55000)*100 * 0.3) + ((ant/24)*100 * 0.2);
+
+if (score > 75) {
+colors.push('#10b981'); 
+} else if (score > 40) {
+colors.push('#f59e0b'); 
+} else {
+colors.push('#ef4444'); 
+}
+}
+
+const trace = {
+x: x, y: y, z: z,
+mode: 'markers',
+marker: {
+size: 5,
+color: colors,
+opacity: 0.8,
+line: { width: 0 }
+},
+type: 'scatter3d'
+};
+
+const layout = {
+paper_bgcolor: 'transparent',
+plot_bgcolor: 'transparent',
+margin: { l: 0, r: 0, b: 0, t: 0 },
+scene: {
+xaxis: { title: 'Meses Alta', gridcolor: '#334155', zerolinecolor: '#334155', tickfont: {color: '#94a3b8'}, titlefont: {color: '#cbd5e1'} },
+yaxis: { title: 'Consumo ($)', gridcolor: '#334155', zerolinecolor: '#334155', tickfont: {color: '#94a3b8'}, titlefont: {color: '#cbd5e1'} },
+zaxis: { title: 'Puntualidad %', gridcolor: '#334155', zerolinecolor: '#334155', tickfont: {color: '#94a3b8'}, titlefont: {color: '#cbd5e1'} },
+bgcolor: 'transparent'
+}
+};
+
+Plotly.newPlot('plotlyScore', [trace], layout, {responsive: true, displayModeBar: false});
+}
+
+setTimeout(drawPlotly, 500);
+
+</script>
+</body>
+</html>

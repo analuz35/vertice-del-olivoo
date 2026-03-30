@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecosistema de Salud Unificado - Análisis y Proyecciones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- PALETTE NAME: Vibrant Aqua & Blue (#0B3C5D, #328CC1, #D9B310, #1D2731, #F0F4F8) -->
+    
+    <!-- PLAN SUMMARY: 
+    1. Header: Introduce platform.
+    2. KPIs: High-level projected network stats.
+    3. Patient Journey (Process Flow): HTML/CSS based workflow.
+    4. Operational Impact (Comparison): Bar chart showing absenteeism reduction.
+    5. Service Distribution (Composition): Doughnut chart of usage.
+    6. Adoption Trends (Change): Line chart of telemedicine growth.
+    7. Value-Adds (Qualitative): Styled cards for HCU, IA, etc. 
+    -->
+    
+    <!-- VISUALIZATION CHOICES:
+    - KPIs -> Inform -> Big Numbers (HTML/Tailwind) -> Best for quick impact. Confirming NO SVG.
+    - Patient Journey -> Organize -> Flow Chart (HTML/Tailwind/Unicode) -> Shows process steps. Confirming NO SVG.
+    - Absenteeism Reduction -> Compare -> Bar Chart (Chart.js) -> Contrasts 'before' and 'after' states. Confirming NO SVG.
+    - Service Distribution -> Compare/Composition -> Doughnut Chart (Chart.js) -> Shows breakdown of ecosystem services. Confirming NO SVG.
+    - Adoption Trends -> Change -> Line Chart (Chart.js) -> Illustrates growth over time. Confirming NO SVG.
+    -->
+    
+    <!-- CONFIRMATION: NEITHER Mermaid JS NOR SVG were used anywhere in the output. -->
+
+    <style>
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #F0F4F8; color: #1D2731; }
+        .bg-primary-dark { background-color: #0B3C5D; }
+        .bg-primary-light { background-color: #328CC1; }
+        .text-primary-dark { color: #0B3C5D; }
+        .text-primary-light { color: #328CC1; }
+        .text-accent { color: #D9B310; }
+        .bg-accent { background-color: #D9B310; }
+        
+        .chart-wrapper {
+            position: relative;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .chart-container-md {
+            max-width: 500px;
+            height: 300px;
+            max-height: 350px;
+        }
+        .chart-container-lg {
+            max-width: 900px;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container-md { height: 350px; max-height: 400px; }
+            .chart-container-lg { height: 400px; max-height: 500px; }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="bg-primary-dark text-white sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <span class="text-3xl">&#10010;</span>
+                    <span class="font-bold text-xl tracking-wide">Salud<span class="text-accent">Red</span> Unificada</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-primary-light text-white py-16 px-4">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 leading-tight">Proyección del Ecosistema de Salud Unificado</h1>
+            <p class="text-lg md:text-xl max-w-3xl mx-auto opacity-90">Centralización, eficiencia e interoperabilidad tecnológica para transformar la experiencia del paciente y optimizar la gestión de centros médicos y profesionales.</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+        <section>
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-primary-dark border-b-4 border-accent inline-block pb-2">Alcance Proyectado de la Red</h2>
+                <p class="mt-4 text-gray-700 text-lg">La plataforma actuará como un directorio geolocalizado masivo. Estas son las métricas de integración estimadas para el primer año de despliegue, conectando a todos los actores del sistema sanitario en un solo portal.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center border-t-4 border-primary-light">
+                    <div class="text-5xl mb-2">&#127973;</div>
+                    <div class="text-4xl font-black text-primary-dark mb-2">1.2K+</div>
+                    <div class="text-gray-500 font-medium uppercase tracking-wider text-sm">Centros y Hospitales</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center border-t-4 border-accent">
+                    <div class="text-5xl mb-2">&#128104;&#8205;&#9877;&#65039;</div>
+                    <div class="text-4xl font-black text-primary-dark mb-2">15K+</div>
+                    <div class="text-gray-500 font-medium uppercase tracking-wider text-sm">Profesionales Adheridos</div>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8 text-center border-t-4 border-primary-light">
+                    <div class="text-5xl mb-2">&#128106;</div>
+                    <div class="text-4xl font-black text-primary-dark mb-2">500K+</div>
+                    <div class="text-gray-500 font-medium uppercase tracking-wider text-sm">Pacientes Registrados</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-md p-8">
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">El Viaje del Paciente (Patient Journey)</h2>
+                <p class="text-gray-700 text-lg">El sistema unifica la identidad mediante Google Auth y gestiona de extremo a extremo la atención, reduciendo la fricción burocrática y centralizando la información.</p>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4">
+                <div class="flex flex-col items-center text-center max-w-[150px]">
+                    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-3xl mb-3 shadow-inner border border-blue-200">&#128241;</div>
+                    <h4 class="font-bold text-primary-dark">Auth & Perfil</h4>
+                    <p class="text-xs text-gray-500 mt-1">Ingreso con Google, carga de Obra Social.</p>
+                </div>
+                <div class="text-3xl text-gray-300 transform rotate-90 md:rotate-0">&#10140;</div>
+                <div class="flex flex-col items-center text-center max-w-[150px]">
+                    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-3xl mb-3 shadow-inner border border-blue-200">&#128269;</div>
+                    <h4 class="font-bold text-primary-dark">Búsqueda</h4>
+                    <p class="text-xs text-gray-500 mt-1">Directorio, filtros y calendario en tiempo real.</p>
+                </div>
+                <div class="text-3xl text-gray-300 transform rotate-90 md:rotate-0">&#10140;</div>
+                <div class="flex flex-col items-center text-center max-w-[150px]">
+                    <div class="w-20 h-20 rounded-full bg-yellow-100 flex items-center justify-center text-3xl mb-3 shadow-inner border border-yellow-200">&#9200;</div>
+                    <h4 class="font-bold text-primary-dark">Notificaciones</h4>
+                    <p class="text-xs text-gray-500 mt-1">Recordatorios por WhatsApp API y Gmail.</p>
+                </div>
+                <div class="text-3xl text-gray-300 transform rotate-90 md:rotate-0">&#10140;</div>
+                <div class="flex flex-col items-center text-center max-w-[150px]">
+                    <div class="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center text-3xl mb-3 shadow-inner border border-blue-200">&#127973;</div>
+                    <h4 class="font-bold text-primary-dark">Atención</h4>
+                    <p class="text-xs text-gray-500 mt-1">Cálculo de copagos, atención médica.</p>
+                </div>
+                <div class="text-3xl text-gray-300 transform rotate-90 md:rotate-0">&#10140;</div>
+                <div class="flex flex-col items-center text-center max-w-[150px]">
+                    <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center text-3xl mb-3 shadow-inner border border-green-200">&#128193;</div>
+                    <h4 class="font-bold text-primary-dark">Resultados</h4>
+                    <p class="text-xs text-gray-500 mt-1">Imágenes (DICOM) y recetas electrónicas al perfil.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">Impacto Administrativo: Ausentismo</h2>
+                <p class="text-gray-700 text-lg mb-4">Uno de los mayores problemas en los centros de salud es la tasa de ausentismo y los turnos caducados. El nuevo Dashboard Administrativo permite monitorear esta métrica de cerca.</p>
+                <p class="text-gray-700 text-lg mb-6">Gracias a la implementación de <strong>Recordatorios Automatizados (WhatsApp/Gmail)</strong> y la función de <strong>Lista de Espera Inteligente</strong>, se proyecta una reducción drástica en la pérdida de turnos, optimizando la agenda del profesional.</p>
+                <div class="bg-blue-50 border-l-4 border-accent p-4 rounded">
+                    <p class="text-sm text-primary-dark font-medium">"La lista de espera inteligente asigna turnos cancelados automáticamente a pacientes cercanos, recuperando hasta el 80% del tiempo operativo perdido."</p>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-center font-bold text-gray-600 mb-2">Tasa de Ausentismo Promedio Proyectada</h3>
+                <div class="chart-wrapper chart-container-md">
+                    <canvas id="absenteeismChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div class="bg-white p-6 rounded-xl shadow-lg order-2 lg:order-1">
+                <h3 class="text-center font-bold text-gray-600 mb-2">Distribución de Solicitudes en la Plataforma</h3>
+                <div class="chart-wrapper chart-container-md">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2">
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">Gestión Integral de Servicios</h2>
+                <p class="text-gray-700 text-lg mb-4">El ecosistema no se limita a consultas médicas tradicionales. Actúa como un hub central para todos los servicios auxiliares y complementarios.</p>
+                <p class="text-gray-700 text-lg mb-4">El Módulo de Imágenes permite compartir resultados de alta densidad (DICOM) de forma segura. Paralelamente, la validación de carnets digitales facilita el acceso a farmacias integradas.</p>
+                <ul class="space-y-3 mt-6">
+                    <li class="flex items-center text-gray-700"><span class="text-accent text-xl mr-3">&#10004;</span> Repositorio seguro para ecografías y resonancias.</li>
+                    <li class="flex items-center text-gray-700"><span class="text-accent text-xl mr-3">&#10004;</span> Cálculo automático de copagos según prepaga.</li>
+                    <li class="flex items-center text-gray-700"><span class="text-accent text-xl mr-3">&#10004;</span> Integración de farmacias en red.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-xl shadow-lg p-8">
+            <div class="mb-8 text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-primary-dark mb-4">Evolución de Modalidades de Atención</h2>
+                <p class="text-gray-700 text-lg">La incorporación del módulo de <strong>Telemedicina</strong> integrado en el portal cambiará la curva de atención para consultas de seguimiento y evaluación preliminar, descongestionando las salas de espera físicas.</p>
+            </div>
+            <div class="chart-wrapper chart-container-lg">
+                <canvas id="trendsChart"></canvas>
+            </div>
+        </section>
+
+        <section>
+            <div class="mb-10 text-center">
+                <h2 class="text-3xl font-bold text-primary-dark border-b-4 border-accent inline-block pb-2">Recomendaciones y Valor Agregado</h2>
+                <p class="mt-4 text-gray-700 text-lg max-w-2xl mx-auto">Módulos avanzados diseñados para escalar la interoperabilidad y mejorar radicalmente el diagnóstico y tratamiento.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#128193;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">Historia Clínica Única (HCU)</h3>
+                    <p class="text-gray-600 text-sm">Registro unificado del paciente interoperable (estándar HL7/FHIR). Si visita un hospital y luego un odontólogo, ambos acceden a antecedentes vitales como alergias y medicación.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#128170;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">Receta Electrónica</h3>
+                    <p class="text-gray-600 text-sm">Emisión de recetas digitales con firma electrónica, enviadas directamente al perfil del paciente, correo electrónico, y accesibles por farmacias de la red.</p>
+                </div>
+                
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#129302;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">IA para Triaje</h3>
+                    <p class="text-gray-600 text-sm">Un chatbot asistente inicial que evalúa síntomas básicos y orienta al paciente hacia la especialidad correcta al momento de sacar el turno.</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#128187;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">Telemedicina Nativa</h3>
+                    <p class="text-gray-600 text-sm">Videoconsultas encriptadas directamente en la plataforma para seguimientos, entrega de resultados o prácticas que no exijan presencialidad.</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#128222;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">Integración WhatsApp</h3>
+                    <p class="text-gray-600 text-sm">Notificaciones push bidireccionales. Confirmación, cancelación y reprogramación automática conversacional ligada a la Lista de Espera Inteligente.</p>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-md border border-gray-100 hover:shadow-xl transition duration-300">
+                    <div class="text-4xl mb-4">&#128202;</div>
+                    <h3 class="text-xl font-bold text-primary-dark mb-2">Dashboards de Desempeño</h3>
+                    <p class="text-gray-600 text-sm">Métricas en tiempo real para centros de salud: volumen diario, especialidades demandadas, ranking de profesionales y gestión de ausentismo.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-primary-dark text-white py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="opacity-75">Visualización de Requerimientos: Ecosistema de Salud Unificado</p>
+        </div>
+    </footer>
+
+    <script>
+        function wrapLabel(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            const lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > 16) {
+                    if (currentLine) lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            });
+            if (currentLine) lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const commonTooltipConfig = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            const item = tooltipItems[0];
+                            let label = item.chart.data.labels[item.dataIndex];
+                            if (Array.isArray(label)) {
+                                return label.join(' ');
+                            } else {
+                                return label;
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: { font: { family: "'Segoe UI', Roboto, sans-serif" } }
+                }
+            },
+            maintainAspectRatio: false,
+            responsive: true
+        };
+
+        const ctxAbsenteeism = document.getElementById('absenteeismChart').getContext('2d');
+        const rawLabelsAbsenteeism = ["Sistema Actual (Promedio Mercado)", "Con Ecosistema (Recordatorios + IA)"];
+        new Chart(ctxAbsenteeism, {
+            type: 'bar',
+            data: {
+                labels: rawLabelsAbsenteeism.map(wrapLabel),
+                datasets: [{
+                    label: 'Tasa de Ausentismo (%)',
+                    data: [28, 8],
+                    backgroundColor: ['#1D2731', '#D9B310'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                ...commonTooltipConfig,
+                scales: {
+                    y: { beginAtZero: true, max: 40, ticks: { callback: function(value){ return value + '%' } } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        const ctxServices = document.getElementById('servicesChart').getContext('2d');
+        const rawLabelsServices = ["Consultas Presenciales General", "Estudios por Imágenes (DICOM)", "Videoconsultas (Telemedicina)", "Farmacia y Otros Servicios"];
+        new Chart(ctxServices, {
+            type: 'doughnut',
+            data: {
+                labels: rawLabelsServices.map(wrapLabel),
+                datasets: [{
+                    data: [45, 25, 20, 10],
+                    backgroundColor: ['#0B3C5D', '#328CC1', '#D9B310', '#A9A9A9'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                ...commonTooltipConfig,
+                cutout: '65%'
+            }
+        });
+
+        const ctxTrends = document.getElementById('trendsChart').getContext('2d');
+        new Chart(ctxTrends, {
+            type: 'line',
+            data: {
+                labels: ['Mes 1', 'Mes 2', 'Mes 3', 'Mes 4', 'Mes 5', 'Mes 6', 'Mes 7', 'Mes 8', 'Mes 9', 'Mes 10', 'Mes 11', 'Mes 12'],
+                datasets: [
+                    {
+                        label: wrapLabel('Consultas Presenciales'),
+                        data: [1000, 1100, 1150, 1200, 1250, 1200, 1180, 1150, 1100, 1050, 1000, 950],
+                        borderColor: '#0B3C5D',
+                        backgroundColor: 'rgba(11, 60, 93, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true
+                    },
+                    {
+                        label: wrapLabel('Consultas Telemedicina'),
+                        data: [50, 100, 180, 250, 350, 480, 600, 750, 850, 980, 1100, 1250],
+                        borderColor: '#328CC1',
+                        backgroundColor: 'transparent',
+                        borderWidth: 3,
+                        borderDash: [5, 5],
+                        tension: 0.4,
+                        pointBackgroundColor: '#D9B310',
+                        pointRadius: 4
+                    }
+                ]
+            },
+            options: {
+                ...commonTooltipConfig,
+                interaction: { mode: 'index', intersect: false },
+                scales: {
+                    y: { beginAtZero: true, title: { display: true, text: 'Volumen de Turnos' } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
